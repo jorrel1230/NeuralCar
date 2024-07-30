@@ -2,12 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <script type="module" src="/main.js"></script>
+    <style>
+
+      body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+      }
+
+      #canvas {
+        border: 1px solid black;
+        display: block;
+        margin: auto;
+        width: calc(100% - 100px);
+        height: calc(100% - 100px);
+      }
+    </style>
+    <title>NeuralCar</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/main.js"></script>
+    
+    <canvas id="canvas" tabindex="0"></canvas>
+    
   </body>
 </html>
