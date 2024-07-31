@@ -17,29 +17,26 @@ class Vector2D {
     // Returns New Vector which is normalized to a unit vector
     normalize() {
         const norm = this.magnitude();
-        return new Vector2D(x/norm, y/norm);
+        if (norm != 0) {
+            return new Vector2D(this.x/norm, this.y/norm);
+        } else {
+            return new Vector2D(0, 0);
+        }
     }
 
-    // Adds another vector to current vector, overwrites current.
+    // Returns sum of another vector and current vector
     add(vector) {
-        this.x += vector.x;
-        this.y += vector.y;
+        return new Vector2D(this.x + vector.x, this.y + vector.y);
     }
 
-    // Multiplies a scalar to current vector, overwrites current.
+    // Returns difference of another vector and current vector
+    subtract(vector) {
+        return new Vector2D(this.x - vector.x, this.y - vector.y);
+    }
+
+    // Returns Product of another vector and current vector
     mult(scalar) {
-        this.x *= scalar;
-        this.y *= scalar;
-    }
-
-    // Multiplies Scalar to only x dimension
-    multX(scalar) {
-        this.x *= scalar;
-    }
-
-    // Multiplies Scalar to only y dimension
-    multY(scalar) {
-        this.y *= scalar;
+        return new Vector2D(this.x * scalar, this.y * scalar);
     }
 
     // Dots another vector to current vector. Returns value.
@@ -47,9 +44,13 @@ class Vector2D {
         return this.x*vector.x + this.y*vector.y;
     }
 
-    // Returns new Vector2D Object with same values.
-    copy() {
-        return new Vector2D(this.x, this.y);
+    cross(vector) {
+        return this.x*vector.y - this.y*vector.x;
+    }
+
+    applyRotMatrix(alpha) {
+        return new Vector2D(Math.cos(alpha)*this.x + Math.sin(alpha)*this.y,
+                            -Math.sin(alpha)*this.x + Math.cos(alpha)*this.y)
     }
 
     // Draws Vector from Start Point x, y represented as arrow
