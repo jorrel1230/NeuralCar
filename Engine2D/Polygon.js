@@ -4,7 +4,7 @@ import canvas from "./Canvas";
 class Polygon {
     constructor(shape, center, rotation) {
         this.shape = shape; // Original Array of Points
-        this.points = [null, null, null, null]; 
+        this.points = new Array(shape.length); 
         this.center = center;
         this.rotation = rotation;
 
@@ -20,7 +20,7 @@ class Polygon {
 
     // Checks if Line Segment AB Intersects Segment CD
     #lineIntersects(A, B, C, D) {
-        return (ccw(A,C,D) != ccw(B,C,D)) && (ccw(A,B,C) != ccw(A,B,D))
+        return (this.#ccw(A,C,D) != this.#ccw(B,C,D)) && (this.#ccw(A,B,C) != this.#ccw(A,B,D))
     }
 
     intersects(polygon) {
