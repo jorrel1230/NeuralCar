@@ -8,8 +8,8 @@ class Bound {
         this.polygon = new Polygon(points, origin, 0);
     }
 
-    draw(color) {
-        this.polygon.draw(color);
+    draw(ctx, color) {
+        this.polygon.draw(ctx, color);
     }
 
 }

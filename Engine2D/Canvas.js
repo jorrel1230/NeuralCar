@@ -9,7 +9,6 @@ class Canvas {
         this.element.width = window.devicePixelRatio * (window.innerWidth - 100);
         this.element.height = window.devicePixelRatio * (window.innerHeight - 100);
 
-        this.context.transform(1, 0, 0, -1, 0, this.element.height)
     }
 
     toCanvasY(y) {
@@ -17,7 +16,15 @@ class Canvas {
     }
 
     clear() {
-        this.context.clearRect(0, 0, this.element.width, this.element.height);
+        this.context.fillStyle = "#aaaaaa"
+        this.context.fillRect(0, 0, this.element.width, this.element.height);
+    }
+
+    writeScore(score) {
+        this.context.fillStyle = "white";
+        this.context.font = "50px Arial";
+        this.context.textAlign = "center";
+        this.context.fillText(`Score: ${score.toFixed(2)}`, this.element.width/2, this.element.height/2);
     }
 }
 

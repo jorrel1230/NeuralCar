@@ -6,6 +6,16 @@ class Controls {
         this.brake = false;
 
         this.#addKeyboardListeners();
+        console.log("Controls Added")
+    }
+
+    disable() {
+        this.throttle = false;
+        this.left = false;
+        this.right = false;
+        this.brake = false;
+        document.onkeydown = null;
+        document.onkeyup = null;
     }
 
     #addKeyboardListeners() {

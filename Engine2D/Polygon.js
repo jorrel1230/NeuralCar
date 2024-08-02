@@ -1,6 +1,3 @@
-import Vector2D from "./Vector2D";
-import canvas from "./Canvas";
-
 class Polygon {
     constructor(shape, center, rotation) {
         this.shape = shape; // Original Array of Points
@@ -15,6 +12,7 @@ class Polygon {
     }
 
     #ccw(A, B, C) {
+        
         return (C.y-A.y) * (B.x-A.x) > (B.y-A.y) * (C.x-A.x)
     }
 
@@ -27,7 +25,7 @@ class Polygon {
         for (let i = 0; i < this.points.length; i++) {
             for (let j = 0; j < polygon.points.length; j++) {
                 if (this.#lineIntersects(this.points[i], this.points[(i+1) % this.points.length], 
-                                         this.points[j], this.points[(j+1) % polygon.points.length])) {
+                                         polygon.points[j], polygon.points[(j+1) % polygon.points.length])) {
                     return true;
                 }
             }
@@ -39,13 +37,11 @@ class Polygon {
         this.rotation = rotation;
     }
 
-    draw(color) {
+    draw(ctx, color) {
         // For every Point on the Polygon, rotate, then move to position.
         for (let i = 0; i < this.shape.length; i++) {
             this.points[i] = this.shape[i].applyRotMatrix(-this.rotation).add(this.center);
         }
-
-        let ctx = canvas.context;
 
         ctx.beginPath();
         ctx.moveTo(this.points[this.points.length-1].x, this.points[this.points.length-1].y);

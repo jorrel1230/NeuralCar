@@ -1,14 +1,14 @@
 import Vector2D from "./Vector2D";
 
 class State {
-    constructor(position, velocity, acceleration) {
+    constructor(position, velocity, acceleration, orientation) {
         this.position = position;
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.netacceleration = acceleration;
         this.friction = 100;
         this.frictionpassive = 100;
-        this.orientation = 0;
+        this.orientation = orientation;
         this.direction = new Vector2D(-Math.sin(this.orientation), Math.cos(this.orientation));
     }
 
@@ -36,7 +36,7 @@ class State {
     }
 
     brakeDown() {
-        this.frictionpassive = 350;
+        this.frictionpassive = 550;
     }
 
     brakeUp() {
@@ -44,12 +44,12 @@ class State {
     }
 
     left() {
-        this.orientation += 0.025;
+        this.orientation -= 0.025;
         this.direction = new Vector2D(-Math.sin(this.orientation), Math.cos(this.orientation));
     }
 
     right() {
-        this.orientation -= 0.025;
+        this.orientation += 0.025;
         this.direction = new Vector2D(-Math.sin(this.orientation), Math.cos(this.orientation));
     }
 
@@ -58,7 +58,11 @@ class State {
         
         this.#tickFriction();
 
+        // Integrates Acceleration
         this.velocity = this.velocity.add(this.netacceleration.mult(dt));
+        // Rotates velocity vector slightly in direction of turn
+        this.velocity = this.velocity.applyRotMatrix(this.velocity.normalize().cross(this.direction) * -0.005);
+        // Integrates Velocity
         this.position = this.position.add(this.velocity.mult(dt));
                 
     }
