@@ -6,20 +6,23 @@ import Vector2D from "./Vector2D";
 import Controls from "./Controls";
 import Polygon from "./Polygon";
 import Sensor from "./Sensor";
+import Network from "../Network/network";
 
 class Car {
-    constructor(x, y, w, h, rotation=0, color="black", vectors=false) {
-        this.color = color;
+    constructor(x, y, w, h, rotation=0, vectors=false, networkControlEnabled=false, showSensors=false) {
         this.w = w;
         this.h = h;
         this.state = new State(new Vector2D(x, y), // Position
                                new Vector2D(0, 0), // Velocity
                                new Vector2D(0, 0),
                                rotation); // Acceleration
-        this.controls = new Controls();
+        this.controls = new Controls(!networkControlEnabled);
         this.show_vectors = vectors;
+        this.showSensors = showSensors;
 
         this.sensor = new Sensor(this);
+        this.brain = new Network([this.sensor.rayCount, 6, 6, 4]);
+        this.useBrain = networkControlEnabled;
 
         this.polygon = new Polygon([
             new Vector2D(-this.w/2, this.h/2),
@@ -32,13 +35,8 @@ class Car {
         this.lastscore = 0 
         this.laps = 0;
 
-    }
+        this.crashed = false;
 
-    disableControls() {
-        this.controls.disable();
-        this.state.velocity = new Vector2D(0, 0);
-        this.state.acceleration = new Vector2D(0, 0);
-        
     }
 
     getScore() {
@@ -85,18 +83,32 @@ class Car {
 
     // Handles Stepping forward the Physics engine by one tick, and interprets key presses.
     step(dt, bounds) {
-        this.#updateControls();
-        this.state.tick(dt);
-        this.polygon.set(this.state.position, this.state.orientation);
-        this.sensor.update(bounds);
+        if (!this.crashed) {
+            this.#updateControls();
+            this.state.tick(dt);
+            this.polygon.set(this.state.position, this.state.orientation);
+            this.sensor.update(bounds);
+            const sensorReadings = this.sensor.readings.map(e => e==null ? 0 : 1 - e.offset);
+            const outputs = Network.feedForward(sensorReadings, this.brain);
+            if (this.useBrain) {
+                this.controls.throttle = outputs[0];
+                this.controls.left = outputs[1];
+                this.controls.brake = outputs[2];
+                this.controls.right = outputs[3];
+            }
+        } else {
+            this.state.velocity = new Vector2D(0, 0);
+            this.state.acceleration = new Vector2D(0, 0);
+        }
+        
     }
 
     // Handles Drawing the Car to the Canvas.
-    draw(ctx) {
+    draw(ctx, color) {
 
-        this.polygon.draw(ctx, this.color);
-
-        this.sensor.draw(ctx);
+        this.polygon.draw(ctx, color);
+        
+        if (this.showSensors) this.sensor.draw(ctx);
 
         if (this.show_vectors) {
             const x = this.state.position.x;

@@ -1,23 +1,18 @@
 // --- Canvas.js --- //
-// Exports an Object for the Canvas.
+// Exports an Object for the Car Canvas.
 
 class Canvas {
     constructor() {
-        this.element = document.getElementById("canvas");
+        this.element = document.getElementById("carCanvas");
         this.context = this.element.getContext("2d");
 
-        this.element.width = window.devicePixelRatio * (window.innerWidth - 100);
-        this.element.height = window.devicePixelRatio * (window.innerHeight - 100);
+        this.element.width = window.devicePixelRatio * (window.innerWidth*0.6-20);
+        this.element.height = window.devicePixelRatio * (window.innerHeight-20);
 
-    }
-
-    toCanvasY(y) {
-        return this.element.clientHeight - y;
     }
 
     clear() {
-        this.context.fillStyle = "#aaaaaa"
-        this.context.fillRect(0, 0, this.element.width, this.element.height);
+        this.context.clearRect(0, 0, this.element.width, this.element.height);
     }
 
     writeScore(score) {

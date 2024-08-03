@@ -1,21 +1,16 @@
 class Controls {
-    constructor() {
+    constructor(enableKeys=true) {
         this.throttle = false;
         this.left = false;
         this.right = false;
         this.brake = false;
 
-        this.#addKeyboardListeners();
+        if (enableKeys) this.enableKeyInputs();
         console.log("Controls Added")
     }
 
-    disable() {
-        this.throttle = false;
-        this.left = false;
-        this.right = false;
-        this.brake = false;
-        document.onkeydown = null;
-        document.onkeyup = null;
+    enableKeyInputs() {
+        this.#addKeyboardListeners();
     }
 
     #addKeyboardListeners() {
