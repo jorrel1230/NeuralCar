@@ -39,6 +39,15 @@ class Visualizer{
         else return "#0000ff";
     }
 
+    static #getActivationRGBA(n) {
+        if (n <= 0) return "#191b1c";
+        else if (n <= 0.2) return "#3C4142";
+        else if (n <= 0.4) return "#7e8182";
+        else if (n <= 0.6) return "#a1a3a4";
+        else if (n <= 0.8) return "#d4d6d7";
+        else return "#ffffff";
+    }
+
     static drawLevel(ctx,level,left,top,width,height,outputLabels){
         const right=left+width;
         const bottom=top+height;
@@ -71,7 +80,7 @@ class Visualizer{
             ctx.fill();
             ctx.beginPath();
             ctx.arc(x,bottom,nodeRadius*0.6,0,Math.PI*2);
-            ctx.fillStyle=Visualizer.#getRGBA(inputs[i]);
+            ctx.fillStyle=Visualizer.#getActivationRGBA(inputs[i]);
             ctx.fill();
         }
         
@@ -83,7 +92,7 @@ class Visualizer{
             ctx.fill();
             ctx.beginPath();
             ctx.arc(x,top,nodeRadius*0.6,0,Math.PI*2);
-            ctx.fillStyle=Visualizer.#getRGBA(outputs[i]);
+            ctx.fillStyle=Visualizer.#getActivationRGBA(outputs[i]);
             ctx.fill();
 
             ctx.beginPath();

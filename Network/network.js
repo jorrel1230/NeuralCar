@@ -1,3 +1,5 @@
+import utils from "../Engine2D/utils";
+
 class Network {
     constructor(neuronCounts) {
         this.layers = [];
@@ -26,6 +28,28 @@ class Network {
 
     static #BinarySigmoid(n) {
         return (1 / (1+Math.exp(-n)) > 0.5);
+    }
+
+    static mutate(network, mutationRate=0.1) {
+        network.layers.forEach(layer => {
+            for (let i = 0; i < layer.biases.length; i++) {
+                layer.biases[i] = utils.lerp(
+                    layer.biases[i],
+                    Math.random() * 2 - 1,
+                    mutationRate
+                );
+            }
+            for (let i = 0; i < layer.inputs.length; i++) {
+                for (let j = 0; j < layer.outputs.length; j++) {
+                    layer.weights[i][j] = utils.lerp(
+                        layer.weights[i][j],
+                        Math.random() * 2 - 1,
+                        mutationRate
+                    );
+                }
+            }
+
+        })
     }
 
 }

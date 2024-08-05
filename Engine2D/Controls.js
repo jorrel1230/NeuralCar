@@ -6,7 +6,6 @@ class Controls {
         this.brake = false;
 
         if (enableKeys) this.enableKeyInputs();
-        console.log("Controls Added")
     }
 
     enableKeyInputs() {

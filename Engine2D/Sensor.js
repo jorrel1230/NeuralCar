@@ -3,9 +3,9 @@ import utils from "./utils";
 class Sensor {
     constructor(car) {
         this.car = car;
-        this.rayCount = 5;
+        this.rayCount = 7;
         this.rayLength = 200;
-        this.raySpread = 3.1415/2;
+        this.raySpread = Math.PI;
 
         this.#fillRaysArray();
         this.readings = []

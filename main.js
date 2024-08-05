@@ -4,9 +4,13 @@ import netCanvas from "./Network/networkCanvas";
 import Bound from "./Engine2D/Bound";
 import Vector2D from "./Engine2D/Vector2D";
 import Visualizer from "./Network/Visualizer";
+import Network from "./Network/network";
 
-const N = 2000;
+const N = 1;
+const dt = 0.0125;
+let bestCar;
 
+let mutationRate = 0.0002;
 
 const generateCars = (N) => {
   const cars = [];
@@ -16,17 +20,45 @@ const generateCars = (N) => {
   return cars;
 }
 
+export const saveCurrNetwork = () => {
+  localStorage.setItem("savedNetwork",
+    JSON.stringify(bestCar.brain)
+  );
+  console.log("Saved Currently Highlighted Car");
+}
+
+export const deleteCurrNetwork = () => {
+  localStorage.removeItem("savedNetwork");
+  console.log("Deleted Car in Local Storage");
+
+}
 
 const main = () => {
 
   const w = canvas.element.width;
   const h = canvas.element.height;
   
-  var prevTime = Date.now();
   // let car = new Car(w*0.5, h*0.875, w*0.015, w*0.035, -1.57, "lightblue", 0, 0);
 
-  let cars = generateCars(N);
+  if (localStorage.getItem("mutationRate")) {
+    mutationRate = localStorage.getItem("mutationRate");
+  }
 
+  let cars = generateCars(N);
+  bestCar = cars[0];
+
+
+  if (localStorage.getItem("savedNetwork")) {
+
+    const bestNetwork = JSON.parse(localStorage.getItem("savedNetwork"));
+
+    for (let i = 0; i < N; i++) {
+      cars[i].brain = JSON.parse(localStorage.getItem("savedNetwork"));
+      Network.mutate(cars[i].brain, mutationRate); 
+    }
+
+    bestCar.brain = bestNetwork;
+  }
 
   const bounds = [
     new Bound([
@@ -62,10 +94,6 @@ const main = () => {
 
   const loop = () => {
 
-    const currTime = Date.now();
-    const dt = (currTime - prevTime)/1000;
-    prevTime = currTime; 
-
     canvas.clear();
 
     // car.step(dt, bounds);
@@ -79,13 +107,11 @@ const main = () => {
     // }
     // car.draw(canvas.context);
 
-    let bestScore = -99999999;
-    let bestScoreIndex = 0;
-
     for (let i = 0; i < bounds.length; i++) {
       bounds[i].draw(canvas.context, "#222222");
     }
 
+    canvas.context.globalAlpha = 0.5;
     for (let i = 0; i < N; i++) {
       cars[i].step(dt, bounds);
 
@@ -94,7 +120,7 @@ const main = () => {
           cars[i].crashed = true;
         }
       }
-      cars[i].draw(canvas.context, cars[i].crashed ? "gray" : "lightblue");
+      cars[i].draw(canvas.context, cars[i].crashed ? "gray" : "lightblue", 0);
 
     }
 
@@ -102,14 +128,14 @@ const main = () => {
     // Visualizer.drawNetwork(netCanvas.context, car.brain);
 
     for (let i = 0; i < N; i++) {
-      if (cars[i].getScore() > bestScore && !cars[i].crashed) {
-        bestScoreIndex = i;
-        bestScore = cars[i].getScore();
+      if (cars[i].getScore() > bestCar.getScore() && !cars[i].crashed) {
+        bestCar = cars[i];
       }
     }
-    cars[bestScoreIndex].draw(canvas.context, "blue");
-    canvas.writeScore(cars[bestScoreIndex].getScore());
-    Visualizer.drawNetwork(netCanvas.context, cars[bestScoreIndex].brain);
+    canvas.context.globalAlpha = 1;
+    bestCar.draw(canvas.context, "blue", 1);
+    canvas.writeScore(bestCar.getScore());
+    Visualizer.drawNetwork(netCanvas.context, bestCar.brain);
 
     requestAnimationFrame(loop);
   };

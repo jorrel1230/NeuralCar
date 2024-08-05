@@ -4,12 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/main.js"></script>
+    <script>
+      module = {};
+    </script>
+    <script type="module">
+      import { saveCurrNetwork, deleteCurrNetwork } from './main.js';
+      module.saveCurrNetwork = saveCurrNetwork;
+      module.deleteCurrNetwork = deleteCurrNetwork;
+
+      var slider = document.getElementById("myRange");
+      var output = document.getElementById("demo");
+      if (localStorage.getItem("mutationRate")) {
+        slider.value = Math.exp(localStorage.getItem("mutationRate")) * 500000;
+      }
+
+      output.innerHTML = (Math.log(slider.value / 500000)*100).toFixed(4);
+
+      slider.oninput = () => {
+        const mutRate = Math.log(slider.value / 500000);
+        output.innerHTML = (mutRate*100).toFixed(4);
+        localStorage.setItem("mutationRate", mutRate);
+      }
+
+
+    </script>
     <link rel="stylesheet" href="style.css">
     <title>NeuralCar</title>
   </head>
   <body>
     
     <canvas id="carCanvas" tabindex="0"></canvas>
+
+    <div id="buttons">
+      <button onclick="module.saveCurrNetwork()">💾</button>
+      <button onclick="module.deleteCurrNetwork()">🗑️</button>
+    </div>
+    <input type="range" min="500000" max="560000" value="100" class="slider" id="myRange">
+    <h1>Mutation Rate: <span id="demo"></span> % </h1>
+
+
     <canvas id="networkCanvas" tabindex="1"></canvas>
     
     

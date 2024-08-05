@@ -9,7 +9,7 @@ import Sensor from "./Sensor";
 import Network from "../Network/network";
 
 class Car {
-    constructor(x, y, w, h, rotation=0, vectors=false, networkControlEnabled=false, showSensors=false) {
+    constructor(x, y, w, h, rotation=0, vectors=false, networkControlEnabled=false) {
         this.w = w;
         this.h = h;
         this.state = new State(new Vector2D(x, y), // Position
@@ -18,10 +18,10 @@ class Car {
                                rotation); // Acceleration
         this.controls = new Controls(!networkControlEnabled);
         this.show_vectors = vectors;
-        this.showSensors = showSensors;
 
         this.sensor = new Sensor(this);
-        this.brain = new Network([this.sensor.rayCount, 6, 6, 4]);
+
+        this.brain = new Network([this.sensor.rayCount, 10, 10, 10, 4]);
         this.useBrain = networkControlEnabled;
 
         this.polygon = new Polygon([
@@ -88,7 +88,9 @@ class Car {
             this.state.tick(dt);
             this.polygon.set(this.state.position, this.state.orientation);
             this.sensor.update(bounds);
-            const sensorReadings = this.sensor.readings.map(e => e==null ? 0 : 1 - e.offset);
+
+            let sensorReadings = this.sensor.readings.map(e => e==null ? 0 : 1 - e.offset);
+
             const outputs = Network.feedForward(sensorReadings, this.brain);
             if (this.useBrain) {
                 this.controls.throttle = outputs[0];
@@ -104,11 +106,11 @@ class Car {
     }
 
     // Handles Drawing the Car to the Canvas.
-    draw(ctx, color) {
+    draw(ctx, color, showSensors) {
 
         this.polygon.draw(ctx, color);
         
-        if (this.showSensors) this.sensor.draw(ctx);
+        if (showSensors) this.sensor.draw(ctx);
 
         if (this.show_vectors) {
             const x = this.state.position.x;
