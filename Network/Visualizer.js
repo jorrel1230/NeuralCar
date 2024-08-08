@@ -33,7 +33,6 @@ class Visualizer{
     static #getRGBA(n) {
         if (n < -0.7) return "#ff0000";
         else if (n < -0.3) return "#aa0000";
-        else if (n < 0) return "#550000";
         else if (n < 0.3) return "#000055";
         else if (n < 0.7) return "#0000aa";
         else return "#0000ff";
@@ -56,18 +55,20 @@ class Visualizer{
 
         for(let i=0;i<inputs.length;i++){
             for(let j=0;j<outputs.length;j++){
-                ctx.beginPath();
-                ctx.moveTo(
-                    Visualizer.#getNodeX(inputs,i,left,right),
-                    bottom
-                );
-                ctx.lineTo(
-                    Visualizer.#getNodeX(outputs,j,left,right),
-                    top
-                );
-                ctx.lineWidth=2;
-                ctx.strokeStyle=Visualizer.#getRGBA(weights[i][j]);
-                ctx.stroke();
+                if (Math.abs(weights[i][j]) > 0.05) {
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        Visualizer.#getNodeX(inputs,i,left,right),
+                        bottom
+                    );
+                    ctx.lineTo(
+                        Visualizer.#getNodeX(outputs,j,left,right),
+                        top
+                    );
+                    ctx.lineWidth=2;
+                    ctx.strokeStyle=Visualizer.#getRGBA(weights[i][j]);
+                    ctx.stroke();
+                }
             }
         }
 

@@ -21,7 +21,7 @@ class Car {
 
         this.sensor = new Sensor(this);
 
-        this.brain = new Network([this.sensor.rayCount, 10, 10, 10, 4]);
+        this.brain = new Network([this.sensor.rayCount, 5, 5, 4]);
         this.useBrain = networkControlEnabled;
 
         this.polygon = new Polygon([

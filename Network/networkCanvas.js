@@ -14,6 +14,17 @@ class NetworkCanvas {
     clear() {
         this.context.clearRect(0, 0, this.element.width, this.element.height);
     }
+
+    drawControls() {
+        this.context.clearRect(0, 0, this.element.width, this.element.height);
+        this.context.fillStyle = "white";
+        this.context.font = "50px Arial";
+        this.context.textAlign = "center";  
+        this.context.fillText("W: Throttle", this.element.width/2, this.element.height*0.2);
+        this.context.fillText("A: Left", this.element.width/2, this.element.height*0.4);
+        this.context.fillText("S: Brake", this.element.width/2, this.element.height*0.6);
+        this.context.fillText("D: Right", this.element.width/2, this.element.height*0.8);
+    }
 }
 
 // Export Single Instance
