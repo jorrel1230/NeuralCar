@@ -10,6 +10,6 @@ How to use:
 
 - Click Restart Button to start a new generation of cars based on currently saved network as parent.
 
-- Click Human/Robot Icon in top-right to switch between User control and AI control. Restart to initiate changes.
+- Click Human/Robot Icon in top-right to switch between User control and Network control. Restart to initiate changes.
 
 ![image](https://github.com/user-attachments/assets/4fd457bd-5444-46a4-83cc-20b42857b314)
