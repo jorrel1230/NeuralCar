@@ -1,10 +1,10 @@
-import Car from "./Engine2D/Car";
-import canvas from "./Engine2D/Canvas";
-import netCanvas from "./Network/networkCanvas";
-import Bound from "./Engine2D/Bound";
-import Vector2D from "./Engine2D/Vector2D";
-import Visualizer from "./Network/Visualizer";
-import Network from "./Network/network";
+import Car from "./Engine2D/Car.js";
+import canvas from "./Engine2D/Canvas.js";
+import netCanvas from "./Network/networkCanvas.js";
+import Bound from "./Engine2D/Bound.js";
+import Vector2D from "./Engine2D/Vector2D.js";
+import Visualizer from "./Network/Visualizer.js";
+import Network from "./Network/network.js";
 
 const dt = 0.00625;
 let bestCar;
